@@ -21,10 +21,23 @@ impl<T> Vec3<T> {
     pub fn new(x: T, y: T, z: T) -> Self {
         Self { x, y, z }
     }
+
+    pub fn into<U>(self) -> Vec3<U>
+    where T: Into<U>,
+    {
+        Vec3 {
+            x: self.x.into(),
+            y: self.y.into(),
+            z: self.z.into(),
+        }
+    }
 }
 
 pub type Vec3f = Vec3<f32>;
 pub type Vec3i = Vec3<i32>;
+
+pub type Point3f = Vec3f;
+pub type Point3i = Vec3i;
 
 impl<T: Add<Output = T>> Add for Vec3<T> {
     type Output = Self;

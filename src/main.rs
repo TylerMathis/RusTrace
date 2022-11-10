@@ -1,6 +1,4 @@
-mod core {
-    mod vector;
-}
+mod core;
 
 fn main() {
     println!("Hello, world!");

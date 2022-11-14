@@ -6,18 +6,19 @@ use crate::core::vector::{Point3f, Vec3f};
 // BEGIN INTERFACE //
 /////////////////////
 
+/// An [Interaction] represents the interaction of light with some participating medium.
 pub struct Interaction {
-    // The location of the hit
+    /// The location of the hit
     p: Point3f,
 
-    // The time of the hit, represents a scalar on the unit ray
+    /// The time of the hit, represents a scalar on the unit ray
     t: f64,
 
-    // The normal of the surface at the hit location
-    // Optional to account for media interactions
+    /// The normal of the surface at the hit location
+    /// Optional to account for media interactions
     n: Option<Vec3f>,
 
-    // The wo term as represented in the rendering equation
+    /// The wo term as represented in the rendering equation
     wo: Vec3f,
 }
 

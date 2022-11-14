@@ -1,25 +1,19 @@
+use crate::core::interaction::Interaction;
 use crate::core::primitive::Primitive;
-use crate::core::scene::Scene;
+use crate::core::ray::Ray;
 
 /////////////////////
 // BEGIN INTERFACE //
 /////////////////////
 
-/// An [Accelerator] is responsible for testing rays against a [Scene].
-/// The most basic implementation would test every [Primitive] in the [Scene]
+/// Responsible for testing rays against a collection of [Primitive]s.
+/// The most basic implementation would test every [Primitive] in the collection
 /// and return the closest.
-pub trait Accelerator {}
+pub trait Accelerator {
+    fn build(&self, primitives: Vec<&dyn Primitive>);
+    fn test(&self, ray: &Ray) -> Interaction;
+}
 
-//////////////////////////
-// END INTERFACE        //
-// BEGIN IMPLEMENTATION //
-//////////////////////////
-
-////////////////////////
-// END IMPLEMENTATION //
-// BEGIN TESTS        //
-////////////////////////
-
-///////////////
-// END TESTS //
-///////////////
+///////////////////
+// END INTERFACE //
+///////////////////

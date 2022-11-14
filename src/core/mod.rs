@@ -5,6 +5,5 @@ pub mod interaction;
 pub mod material;
 pub mod primitive;
 pub mod ray;
-pub mod rus_t_trace;
-pub mod scene;
+pub mod rustrace;
 pub mod vector;

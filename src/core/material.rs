@@ -1,21 +1,15 @@
+use crate::core::interaction::Interaction;
+
 /////////////////////
 // BEGIN INTERFACE //
 /////////////////////
 
-/// A [Material] defines the physical properties of some [Primitive],
+/// Defines the physical properties of some [Primitive],
 /// determining how light interacts with the object.
-pub trait Material {}
+pub trait Material {
+    fn interact(&self, collision: &Interaction);
+}
 
-//////////////////////////
-// END INTERFACE        //
-// BEGIN IMPLEMENTATION //
-//////////////////////////
-
-////////////////////////
-// END IMPLEMENTATION //
-// BEGIN TESTS        //
-////////////////////////
-
-///////////////
-// END TESTS //
-///////////////
+///////////////////
+// END INTERFACE //
+///////////////////

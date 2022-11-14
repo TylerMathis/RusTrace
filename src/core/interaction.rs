@@ -6,7 +6,7 @@ use crate::core::vector::{Point3f, Vec3f};
 // BEGIN INTERFACE //
 /////////////////////
 
-/// An [Interaction] represents the interaction of light with some participating medium.
+/// Represents the collision of light with some participating medium.
 pub struct Interaction {
     /// The location of the hit
     p: Point3f,
@@ -15,7 +15,7 @@ pub struct Interaction {
     t: f64,
 
     /// The normal of the surface at the hit location
-    /// Optional to account for media interactions
+    /// Optional to account for media collisions
     n: Option<Vec3f>,
 
     /// The wo term as represented in the rendering equation
@@ -65,14 +65,14 @@ mod tests {
 
     #[test]
     fn ord() {
-        let a = Interaction::new_on_surface(
+        let a = Collision::new_on_surface(
             Point3f::new(1.0, 1.0, 1.0),
             0.5,
             Vec3f::new(1.0, 1.0, 1.0),
             Vec3f::new(1.0, 1.0, 1.0),
         );
 
-        let b = Interaction::new_on_surface(
+        let b = Collision::new_on_surface(
             Point3f::new(1.0, 1.0, 1.0),
             0.6,
             Vec3f::new(1.0, 1.0, 1.0),

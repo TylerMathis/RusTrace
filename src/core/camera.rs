@@ -2,6 +2,7 @@
 // BEGIN INTERFACE //
 /////////////////////
 
+/// A [Camera] is responsible for transforming screen-space coordinates into an outgoing ray.
 pub trait Camera {}
 
 //////////////////////////

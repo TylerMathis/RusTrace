@@ -1,14 +1,10 @@
-use crate::core::primitive::Primitive;
-use crate::core::scene::Scene;
-
 /////////////////////
 // BEGIN INTERFACE //
 /////////////////////
 
-/// An [Accelerator] is responsible for testing rays against a [Scene].
-/// The most basic implementation would test every [Primitive] in the [Scene]
-/// and return the closest.
-pub trait Accelerator {}
+/// A [Material] defines the physical properties of some [Primitive],
+/// determining how light interacts with the object.
+pub trait Material {}
 
 //////////////////////////
 // END INTERFACE        //

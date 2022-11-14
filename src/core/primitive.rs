@@ -1,14 +1,9 @@
-use crate::core::primitive::Primitive;
-use crate::core::scene::Scene;
-
 /////////////////////
 // BEGIN INTERFACE //
 /////////////////////
 
-/// An [Accelerator] is responsible for testing rays against a [Scene].
-/// The most basic implementation would test every [Primitive] in the [Scene]
-/// and return the closest.
-pub trait Accelerator {}
+/// A [Primitive] is the core trait for geometry in a [Scene].
+pub trait Primitive {}
 
 //////////////////////////
 // END INTERFACE        //

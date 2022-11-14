@@ -5,6 +5,7 @@ use std::ops::{Add, Div, Mul, Sub};
 // BEGIN INTERFACE //
 /////////////////////
 
+/// A geometric three-dimensional vector
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct Vec3<T> {
     pub x: T,

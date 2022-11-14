@@ -1,10 +1,17 @@
-use crate::core::vector::Vec3f;
+use crate::core::vector::{Point3f, Vec3f};
 
 /////////////////////
 // BEGIN INTERFACE //
 /////////////////////
 
-pub struct Ray {}
+/// An instance of the simple geometric [Ray].
+pub struct Ray {
+    /// The origin
+    o: Point3f,
+
+    /// The direction, often normalized but not guaranteed
+    d: Vec3f,
+}
 
 //////////////////////////
 // END INTERFACE        //

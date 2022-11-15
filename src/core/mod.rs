@@ -6,4 +6,6 @@ pub mod material;
 pub mod primitive;
 pub mod ray;
 pub mod rustrace;
+pub mod sample;
+pub mod sampler;
 pub mod vector;

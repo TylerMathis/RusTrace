@@ -6,13 +6,13 @@ use crate::core::vector::Color3f;
 
 pub struct Sample {
     /// The x position of the sample [0.0, 1.0]
-    x: f64,
+    pub x: f64,
 
     /// The y position of the sample [0.0, 1.0]
-    y: f64,
+    pub y: f64,
 
     /// The color of the sample, each element [0.0, 1.0]
-    color: Color3f,
+    pub color: Color3f,
 }
 
 //////////////////////////

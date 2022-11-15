@@ -7,7 +7,7 @@ use crate::core::interaction::Interaction;
 /// Defines the physical properties of some [Primitive],
 /// determining how light interacts with the object.
 pub trait Material {
-    fn interact(&self, collision: &Interaction);
+    fn interact(&self, interaction: &Interaction);
 }
 
 ///////////////////

@@ -11,7 +11,7 @@ use crate::core::ray::Ray;
 /// and return the closest.
 pub trait Accelerator {
     fn build(&self, primitives: Vec<&dyn Primitive>);
-    fn test(&self, ray: &Ray) -> Interaction;
+    fn test(&self, ray: &Ray) -> Option<Interaction>;
 }
 
 ///////////////////

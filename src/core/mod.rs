@@ -1,5 +1,7 @@
 pub mod accelerator;
+pub mod bounds;
 pub mod camera;
+pub mod film;
 pub mod integrator;
 pub mod interaction;
 pub mod material;

@@ -7,19 +7,20 @@ use crate::core::vector::{Point3f, Vec3f};
 /////////////////////
 
 /// Represents the collision of light with some participating medium.
+#[derive(Debug)]
 pub struct Interaction {
     /// The location of the hit
-    p: Point3f,
+    pub p: Point3f,
 
     /// The time of the hit, represents a scalar on the unit ray
-    t: f64,
+    pub t: f64,
 
     /// The normal of the surface at the hit location
     /// Optional to account for media collisions
-    n: Option<Vec3f>,
+    pub n: Option<Vec3f>,
 
     /// The wo term as represented in the rendering equation
-    wo: Vec3f,
+    pub wo: Vec3f,
 }
 
 //////////////////////////
@@ -39,6 +40,10 @@ impl Interaction {
 
     pub fn new_in_media(p: Point3f, t: f64, wo: Vec3f) -> Self {
         Self { p, t, n: None, wo }
+    }
+
+    pub fn is_eq(&self, other: &Self) -> bool {
+        self.p == other.p && self.t == other.t && self.n == other.n && self.wo == other.wo
     }
 }
 
@@ -65,14 +70,14 @@ mod tests {
 
     #[test]
     fn ord() {
-        let a = Collision::new_on_surface(
+        let a = Interaction::new_on_surface(
             Point3f::new(1.0, 1.0, 1.0),
             0.5,
             Vec3f::new(1.0, 1.0, 1.0),
             Vec3f::new(1.0, 1.0, 1.0),
         );
 
-        let b = Collision::new_on_surface(
+        let b = Interaction::new_on_surface(
             Point3f::new(1.0, 1.0, 1.0),
             0.6,
             Vec3f::new(1.0, 1.0, 1.0),

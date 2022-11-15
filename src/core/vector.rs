@@ -1,5 +1,7 @@
+use std::ops::{Add, Div, Mul, Neg, Sub};
+
 use num_traits::float::Float;
-use std::ops::{Add, Div, Mul, Sub};
+use num_traits::Num;
 
 /////////////////////
 // BEGIN INTERFACE //
@@ -13,6 +15,17 @@ pub struct Vec3<T> {
     pub z: T,
 }
 
+pub type Point3<T> = Vec3<T>;
+
+pub type Vec3f = Vec3<f64>;
+pub type Vec3i = Vec3<i32>;
+
+pub type Point3f = Vec3f;
+pub type Point3i = Vec3i;
+
+pub type Color3f = Vec3f;
+pub type Color3i = Vec3i;
+
 //////////////////////////
 // END INTERFACE        //
 // BEGIN IMPLEMENTATION //
@@ -24,31 +37,26 @@ impl<T> Vec3<T> {
     }
 
     pub fn into<U>(self) -> Vec3<U>
-    where T: Into<U>,
+    where
+        T: Into<U>,
     {
-        Vec3 {
-            x: self.x.into(),
-            y: self.y.into(),
-            z: self.z.into(),
-        }
+        Vec3::new(self.x.into(), self.y.into(), self.z.into())
     }
 }
 
-pub type Vec3f = Vec3<f32>;
-pub type Vec3i = Vec3<i32>;
+impl<T: Neg<Output = T>> Neg for Vec3<T> {
+    type Output = Self;
 
-pub type Point3f = Vec3f;
-pub type Point3i = Vec3i;
+    fn neg(self) -> Self {
+        Self::new(-self.x, -self.y, -self.z)
+    }
+}
 
 impl<T: Add<Output = T>> Add for Vec3<T> {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
-        Self {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
-        }
+        Self::new(self.x + other.x, self.y + other.y, self.z + other.z)
     }
 }
 
@@ -56,11 +64,7 @@ impl<T: Sub<Output = T>> Sub for Vec3<T> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
-        Self {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
-        }
+        Self::new(self.x - other.x, self.y - other.y, self.z - other.z)
     }
 }
 
@@ -69,11 +73,15 @@ impl<T: Mul<Output = T>> Mul for Vec3<T> {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
-        Self {
-            x: self.x * other.x,
-            y: self.y * other.y,
-            z: self.z * other.z,
-        }
+        Self::new(self.x * other.x, self.y * other.y, self.z * other.z)
+    }
+}
+
+impl<T: Mul<Output = T> + Copy> Mul<T> for Vec3<T> {
+    type Output = Self;
+
+    fn mul(self, scalar: T) -> Self {
+        Self::new(self.x * scalar, self.y * scalar, self.z * scalar)
     }
 }
 
@@ -82,11 +90,15 @@ impl<T: Div<Output = T>> Div for Vec3<T> {
     type Output = Self;
 
     fn div(self, other: Self) -> Self {
-        Self {
-            x: self.x / other.x,
-            y: self.y / other.y,
-            z: self.z / other.z,
-        }
+        Self::new(self.x / other.x, self.y / other.y, self.z / other.z)
+    }
+}
+
+impl<T: Div<Output = T> + Copy> Div<T> for Vec3<T> {
+    type Output = Self;
+
+    fn div(self, scalar: T) -> Self {
+        Self::new(self.x / scalar, self.y / scalar, self.z / scalar)
     }
 }
 
@@ -104,15 +116,19 @@ impl<T: Float> Vec3<T> {
     pub fn length(&self) -> T {
         self.length_sq().sqrt()
     }
+
+    pub fn normalize(self) -> Self {
+        self / self.length()
+    }
 }
 
 impl<T: Mul<Output = T> + Sub<Output = T> + Copy> Vec3<T> {
     pub fn cross(&self, rhs: &Self) -> Self {
-        Self {
-            x: self.y * rhs.z - self.z * rhs.y,
-            y: self.z * rhs.x - self.x * rhs.z,
-            z: self.x * rhs.y - self.y * rhs.x,
-        }
+        Self::new(
+            self.y * rhs.z - self.z * rhs.y,
+            self.z * rhs.x - self.x * rhs.z,
+            self.x * rhs.y - self.y * rhs.x,
+        )
     }
 }
 

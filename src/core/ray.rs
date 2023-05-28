@@ -5,7 +5,6 @@ use crate::core::vector::{Point3f, Vec3f};
 /////////////////////
 
 /// An instance of the simple geometric [Ray].
-#[derive(Copy)]
 pub struct Ray {
     /// The origin
     pub o: Point3f,

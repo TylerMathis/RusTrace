@@ -8,7 +8,7 @@ use crate::core::film::Film;
 
 /// Responsible for aggregating light information.
 pub trait Integrator {
-    fn render(&self, camera: &dyn Camera, accelerator: &dyn Accelerator, film: &dyn Film);
+    fn render(&self, camera: &dyn Camera, accelerator: &dyn Accelerator, film: &mut dyn Film);
 }
 
 ////////////////////

@@ -7,9 +7,9 @@ use crate::core::sample::Sample;
 /// The final step of light in it's simulation.
 /// Responsible for converting light information into an image.
 pub trait Film {
-    /// Adds a sample to the composition.
-    /// Implementor should discretize and aggregate the sample
-    fn add_sample(&self, sample: &Sample);
+    /// Adds a [Sample] to the composition.
+    /// Implementor should discretize and aggregate the [Sample]
+    fn add_sample(&mut self, sample: &Sample);
 
     fn develop(&self);
 }

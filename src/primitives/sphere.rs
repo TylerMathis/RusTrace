@@ -56,7 +56,7 @@ impl Primitive for Sphere {
                         let furthest = x1.max(x2);
                         (ray.at(furthest)?, furthest)
                     }
-                    Some(location) => (location, closest)
+                    Some(location) => (location, closest),
                 };
                 Some(Interaction::new_on_surface(
                     p,

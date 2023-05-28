@@ -13,8 +13,8 @@ use crate::core::primitive::Primitive;
 pub struct RusTrace<'a> {
     integrator: &'a dyn Integrator,
     camera: &'a dyn Camera,
-    accelerator: &'a dyn Accelerator,
-    film: &'a dyn Film,
+    accelerator: &'a mut dyn Accelerator<'a>,
+    film: &'a mut dyn Film,
 }
 
 //////////////////////////
@@ -24,10 +24,10 @@ pub struct RusTrace<'a> {
 
 impl<'a> RusTrace<'a> {
     pub fn new(
-        integrator: &dyn Integrator,
-        camera: &dyn Camera,
-        accelerator: &dyn Accelerator,
-        film: &dyn Film,
+        integrator: &'a dyn Integrator,
+        camera: &'a dyn Camera,
+        accelerator: &'a mut dyn Accelerator<'a>,
+        film: &'a mut dyn Film,
     ) -> Self {
         Self {
             integrator,
@@ -37,13 +37,14 @@ impl<'a> RusTrace<'a> {
         }
     }
 
-    pub fn load_primitives(&self, primitives: Vec<&dyn Primitive>) {
+    pub fn load_primitives(&mut self, primitives: &'a Vec<&'a dyn Primitive>) {
         self.accelerator.build(primitives)
     }
 
-    pub fn render(&self) {
+    pub fn render(&mut self) {
         self.integrator
-            .render(&*self.camera, &*self.accelerator, &*self.film)
+            .render(self.camera, self.accelerator, self.film);
+        self.film.develop();
     }
 }
 

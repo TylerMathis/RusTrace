@@ -8,7 +8,7 @@ use crate::core::vector::Point3;
 
 /// An axis-aligned box,
 /// often used to represent the minimum enclosing space of a primitive.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct Bounds3<T> {
     min: Point3<T>,
     max: Point3<T>,

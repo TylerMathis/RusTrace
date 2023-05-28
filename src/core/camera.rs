@@ -8,7 +8,7 @@ use crate::core::sample::Sample;
 /// Responsible for generating outgoing rays to test.
 pub trait Camera {
     /// Transforms a [Sample] into an outgoing [Ray].
-    fn get_ray(&self, sample: Sample) -> Ray;
+    fn get_ray(&self, sample: &Sample) -> Ray;
 }
 
 ///////////////////

@@ -1,14 +1,13 @@
-use std::ops::{Add, Div, Mul, Neg, Sub};
+use std::ops::{Add, Div, DivAssign, Mul, MulAssign, Neg, Sub};
 
 use num_traits::float::Float;
-use num_traits::Num;
 
 /////////////////////
 // BEGIN INTERFACE //
 /////////////////////
 
 /// A geometric three-dimensional vector
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq, Default)]
 pub struct Vec3<T> {
     pub x: T,
     pub y: T,
@@ -44,7 +43,7 @@ impl<T> Vec3<T> {
     }
 }
 
-impl<T: Neg<Output = T>> Neg for Vec3<T> {
+impl<T: Neg<Output = T> + Copy> Neg for Vec3<T> {
     type Output = Self;
 
     fn neg(self) -> Self {
@@ -52,7 +51,7 @@ impl<T: Neg<Output = T>> Neg for Vec3<T> {
     }
 }
 
-impl<T: Add<Output = T>> Add for Vec3<T> {
+impl<T: Add<Output = T> + Copy> Add for Vec3<T> {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
@@ -60,7 +59,7 @@ impl<T: Add<Output = T>> Add for Vec3<T> {
     }
 }
 
-impl<T: Sub<Output = T>> Sub for Vec3<T> {
+impl<T: Sub<Output = T> + Copy> Sub for Vec3<T> {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {
@@ -68,8 +67,8 @@ impl<T: Sub<Output = T>> Sub for Vec3<T> {
     }
 }
 
-// Hadamard product
-impl<T: Mul<Output = T>> Mul for Vec3<T> {
+/// Hadamard product
+impl<T: Mul<Output = T> + Copy> Mul for Vec3<T> {
     type Output = Self;
 
     fn mul(self, other: Self) -> Self {
@@ -77,6 +76,15 @@ impl<T: Mul<Output = T>> Mul for Vec3<T> {
     }
 }
 
+impl<T: MulAssign> MulAssign for Vec3<T> {
+    fn mul_assign(&mut self, rhs: Self) {
+        self.x *= rhs.x;
+        self.y *= rhs.y;
+        self.z *= rhs.z;
+    }
+}
+
+/// Scalar multiplication
 impl<T: Mul<Output = T> + Copy> Mul<T> for Vec3<T> {
     type Output = Self;
 
@@ -85,8 +93,8 @@ impl<T: Mul<Output = T> + Copy> Mul<T> for Vec3<T> {
     }
 }
 
-// Inverse Hadamard product
-impl<T: Div<Output = T>> Div for Vec3<T> {
+/// Inverse Hadamard product
+impl<T: Div<Output = T> + Copy> Div for Vec3<T> {
     type Output = Self;
 
     fn div(self, other: Self) -> Self {
@@ -94,11 +102,28 @@ impl<T: Div<Output = T>> Div for Vec3<T> {
     }
 }
 
+impl<T: DivAssign> DivAssign for Vec3<T> {
+    fn div_assign(&mut self, rhs: Self) {
+        self.x /= rhs.x;
+        self.y /= rhs.y;
+        self.z /= rhs.z;
+    }
+}
+
+/// Scalar division
 impl<T: Div<Output = T> + Copy> Div<T> for Vec3<T> {
     type Output = Self;
 
     fn div(self, scalar: T) -> Self {
         Self::new(self.x / scalar, self.y / scalar, self.z / scalar)
+    }
+}
+
+impl<T: Div<Output = T> + Copy> Div<T> for &Vec3<T> {
+    type Output = Vec3<T>;
+
+    fn div(self, scalar: T) -> Vec3<T> {
+        Vec3::new(self.x / scalar, self.y / scalar, self.z / scalar)
     }
 }
 
@@ -117,7 +142,7 @@ impl<T: Float> Vec3<T> {
         self.length_sq().sqrt()
     }
 
-    pub fn normalize(self) -> Self {
+    pub fn normalize(&self) -> Self {
         self / self.length()
     }
 }

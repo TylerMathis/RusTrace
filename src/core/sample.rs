@@ -21,8 +21,24 @@ pub struct Sample {
 //////////////////////////
 
 impl Sample {
-    pub fn new(x: f64, y: f64, color: Color3f) -> Self {
+    pub fn new(x: f64, y: f64) -> Self {
+        Self {
+            x,
+            y,
+            color: Color3f::default(),
+        }
+    }
+
+    pub fn new_with_color(x: f64, y: f64, color: Color3f) -> Self {
         Self { x, y, color }
+    }
+
+    pub fn color_rgb_bytes(&self) -> [u8; 3] {
+        [
+            (self.color.x * 255.0) as u8,
+            (self.color.y * 255.0) as u8,
+            (self.color.z * 255.0) as u8,
+        ]
     }
 }
 

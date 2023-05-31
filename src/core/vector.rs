@@ -1,6 +1,7 @@
-use std::ops::{Add, Div, DivAssign, Mul, MulAssign, Neg, Sub};
+use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub};
 
 use num_traits::float::Float;
+use rand::Rng;
 
 /////////////////////
 // BEGIN INTERFACE //
@@ -56,6 +57,22 @@ impl<T: Add<Output = T> + Copy> Add for Vec3<T> {
 
     fn add(self, other: Self) -> Self {
         Self::new(self.x + other.x, self.y + other.y, self.z + other.z)
+    }
+}
+
+impl<T: AddAssign> AddAssign for Vec3<T> {
+    fn add_assign(&mut self, rhs: Self) {
+        self.x += rhs.x;
+        self.y += rhs.y;
+        self.z += rhs.z;
+    }
+}
+
+impl<T: AddAssign + Copy> AddAssign<&Vec3<T>> for Vec3<T> {
+    fn add_assign(&mut self, rhs: &Vec3<T>) {
+        self.x += rhs.x;
+        self.y += rhs.y;
+        self.z += rhs.z;
     }
 }
 
@@ -119,6 +136,14 @@ impl<T: Div<Output = T> + Copy> Div<T> for Vec3<T> {
     }
 }
 
+impl<T: DivAssign + Copy> DivAssign<T> for Vec3<T> {
+    fn div_assign(&mut self, rhs: T) {
+        self.x /= rhs;
+        self.y /= rhs;
+        self.z /= rhs;
+    }
+}
+
 impl<T: Div<Output = T> + Copy> Div<T> for &Vec3<T> {
     type Output = Vec3<T>;
 
@@ -154,6 +179,22 @@ impl<T: Mul<Output = T> + Sub<Output = T> + Copy> Vec3<T> {
             self.z * rhs.x - self.x * rhs.z,
             self.x * rhs.y - self.y * rhs.x,
         )
+    }
+}
+
+pub fn random_in_unit_disk() -> Vec3f {
+    // TODO: Don't use shitty non-deterministic approach
+    let mut rng = rand::thread_rng();
+
+    loop {
+        let rx = rng.gen::<f64>();
+        let ry = rng.gen::<f64>();
+        let attempt = Vec3f::new(rx, ry, 0.0);
+
+        // Length squared is faster and maintains <1>1 behavior
+        if attempt.length_sq() <= 1.0 {
+            return attempt;
+        }
     }
 }
 
@@ -226,4 +267,4 @@ mod tests {
 
 ///////////////
 // END TESTS //
-///////////////
+////////////a

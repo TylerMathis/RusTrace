@@ -1,5 +1,7 @@
 use crate::core::vector::Color3f;
 
+use super::vector::Vec3i;
+
 /////////////////////
 // BEGIN INTERFACE //
 /////////////////////
@@ -33,12 +35,12 @@ impl Sample {
         Self { x, y, color }
     }
 
-    pub fn color_rgb_bytes(&self) -> [u8; 3] {
-        [
-            (self.color.x * 255.0) as u8,
-            (self.color.y * 255.0) as u8,
-            (self.color.z * 255.0) as u8,
-        ]
+    pub fn color_rgb_bytes(&self) -> Vec3i {
+        Vec3i::new(
+            (self.color.x * 255.0) as i32,
+            (self.color.y * 255.0) as i32,
+            (self.color.z * 255.0) as i32,
+        )
     }
 }
 

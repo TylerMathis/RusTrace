@@ -5,7 +5,7 @@ use crate::core::sample::Sample;
 /////////////////////
 
 pub trait Sampler {
-    fn next_sample(&self) -> Option<Sample>;
+    fn next_sample(&mut self) -> Option<Sample>;
 }
 
 //////////////////////////

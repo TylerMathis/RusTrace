@@ -11,7 +11,7 @@ use crate::core::primitive::Primitive;
 /// The main runtime manager. This class should be used to manage everything about a render,
 /// from construction of the instance to creation of materials
 pub struct RusTrace<'a> {
-    integrator: &'a dyn Integrator,
+    integrator: &'a mut dyn Integrator<'a>,
     camera: &'a dyn Camera,
     accelerator: &'a mut dyn Accelerator<'a>,
     film: &'a mut dyn Film,
@@ -24,7 +24,7 @@ pub struct RusTrace<'a> {
 
 impl<'a> RusTrace<'a> {
     pub fn new(
-        integrator: &'a dyn Integrator,
+        integrator: &'a mut dyn Integrator<'a>,
         camera: &'a dyn Camera,
         accelerator: &'a mut dyn Accelerator<'a>,
         film: &'a mut dyn Film,
@@ -41,10 +41,9 @@ impl<'a> RusTrace<'a> {
         self.accelerator.build(primitives)
     }
 
-    pub fn render(&mut self) {
+    pub fn render(&'a mut self) {
         self.integrator
             .render(self.camera, self.accelerator, self.film);
-        self.film.develop();
     }
 }
 

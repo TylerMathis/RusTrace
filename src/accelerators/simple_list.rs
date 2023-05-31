@@ -7,7 +7,7 @@ use crate::core::ray::Ray;
 // BEGIN INTERFACE //
 /////////////////////
 
-struct SimpleList<'a> {
+pub struct SimpleList<'a> {
     primitives: &'a Vec<&'a dyn Primitive>,
 }
 
@@ -16,30 +16,29 @@ struct SimpleList<'a> {
 // BEGIN IMPLEMENTATION //
 //////////////////////////
 
+impl<'a> SimpleList<'a> {
+    pub fn new(primitives: &'a Vec<&'a dyn Primitive>) -> Self {
+        Self { primitives }
+    }
+}
+
 impl<'a> Accelerator<'a> for SimpleList<'a> {
     fn build(&mut self, primitives: &'a Vec<&'a dyn Primitive>) {
         self.primitives = primitives;
     }
 
     fn test(&self, ray: &Ray) -> Option<Interaction> {
-        let mut closest_interaction_or_none: Option<Interaction> = None;
+        let mut closest_interaction: Option<Interaction> = None;
 
         for primitive in self.primitives {
             if let Some(interaction) = primitive.test(ray) {
-                closest_interaction_or_none = match closest_interaction_or_none {
-                    Some(closest_interaction) => {
-                        if interaction < closest_interaction {
-                            Some(interaction)
-                        } else {
-                            None
-                        }
-                    }
-                    None => Some(interaction),
+                if closest_interaction.is_none() || interaction < closest_interaction.unwrap() {
+                    closest_interaction = Some(interaction);
                 }
             }
         }
 
-        closest_interaction_or_none
+        closest_interaction
     }
 }
 

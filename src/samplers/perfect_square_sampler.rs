@@ -6,14 +6,8 @@ use crate::core::{sample::Sample, sampler::Sampler};
 
 /// Implemntation of [Sampler] that samples evenly within a pixel
 pub struct PerfectSquareSampler {
-    width: usize,
-    height: usize,
-
-    /// Must be a perfect square
-    samples_per_pixel: usize,
-    sqrt_samples_per_pixel: usize,
-
     samples_per_row: usize,
+    samples_per_col: usize,
     samples: usize,
     current_sample: usize,
 }
@@ -24,30 +18,28 @@ pub struct PerfectSquareSampler {
 //////////////////////////
 
 impl PerfectSquareSampler {
-    pub fn new(width: usize, height: usize, samples_per_pixel: usize) -> Self {
+    pub fn new(width: usize, height: usize, sqrt_samples_per_pixel: usize) -> Self {
+        let samples_per_row = width * sqrt_samples_per_pixel;
+        let samples_per_col = height * sqrt_samples_per_pixel;
+
         Self {
-            width,
-            height,
-            samples_per_pixel,
-            sqrt_samples_per_pixel: (samples_per_pixel as f64).sqrt() as usize,
-            samples_per_row: width * samples_per_pixel,
-            samples: width * height * samples_per_pixel,
+            samples_per_row,
+            samples_per_col,
+            samples: samples_per_row * samples_per_col,
             current_sample: 0,
         }
     }
 }
 
 impl Sampler for PerfectSquareSampler {
-    fn next_sample(&self) -> Option<Sample> {
+    fn next_sample(&mut self) -> Option<Sample> {
         if self.current_sample < self.samples {
-            let pixel_row =
-                (self.current_sample / self.samples_per_row) / self.sqrt_samples_per_pixel;
-            let pixel_column =
-                (self.current_sample % self.samples_per_row) / self.sqrt_samples_per_pixel;
+            let y =
+                (self.current_sample / self.samples_per_row) as f64 / self.samples_per_col as f64;
+            let x =
+                (self.current_sample % self.samples_per_row) as f64 / self.samples_per_row as f64;
 
-            let y = (pixel_row as f64) / (self.height as f64);
-            let x = (pixel_column as f64) / (self.width as f64);
-
+            self.current_sample += 1;
             Some(Sample::new(x, y))
         } else {
             None

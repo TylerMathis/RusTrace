@@ -7,7 +7,7 @@ use crate::core::vector::{Point3f, Vec3f};
 /////////////////////
 
 /// Represents the collision of light with some participating medium.
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub struct Interaction {
     /// The location of the hit
     pub p: Point3f,

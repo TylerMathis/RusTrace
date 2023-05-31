@@ -2,11 +2,11 @@
 // BEGIN INTERFACE //
 /////////////////////
 
-use crate::core::{film::Film, sample::Sample};
+use crate::core::{film::Film, sample::Sample, vector::Color3i};
 use std::{fs::File, io::BufWriter, path::Path};
 
-struct PngFilm {
-    data: Vec<u8>,
+pub struct PngFilm {
+    colors: Vec<Vec<Vec<Color3i>>>,
     width: u32,
     height: u32,
 }
@@ -18,8 +18,17 @@ struct PngFilm {
 
 impl PngFilm {
     pub fn new(width: u32, height: u32) -> Self {
+        let mut colors = Vec::with_capacity(height as usize);
+
+        for r in 0..height {
+            colors.push(Vec::with_capacity(width as usize));
+            for _ in 0..width {
+                colors[r as usize].push(Vec::new());
+            }
+        }
+
         Self {
-            data: Vec::new(),
+            colors,
             width,
             height,
         }
@@ -28,17 +37,28 @@ impl PngFilm {
 
 impl Film for PngFilm {
     fn add_sample(&mut self, sample: &Sample) {
-        // TODO: Properly handle
-        if self.data.len() as u32 / 3 >= self.width * self.height {
-            panic!("Attempted to add more samples than pixels in PNG");
-        }
+        let row = (sample.y * self.height as f64) as usize;
+        let col = (sample.x * self.width as f64) as usize;
 
-        for byte in sample.color_rgb_bytes() {
-            self.data.push(byte);
-        }
+        self.colors[row][col].push(sample.color_rgb_bytes());
     }
 
     fn develop(&self) {
+        let mut data = Vec::new();
+        for row in self.colors.iter() {
+            for colors in row.iter() {
+                let mut aggregated = Color3i::new(0, 0, 0);
+                for color in colors.iter() {
+                    aggregated += color
+                }
+                aggregated /= colors.len() as i32;
+
+                data.push(aggregated.x as u8);
+                data.push(aggregated.y as u8);
+                data.push(aggregated.z as u8);
+            }
+        }
+
         let path = Path::new(r"/Users/tylerhm/Pictures/result.png");
         let file = File::create(path).unwrap();
         let ref mut w = BufWriter::new(file);
@@ -55,7 +75,7 @@ impl Film for PngFilm {
         encoder.set_source_chromaticities(source_chromaticities);
 
         let mut writer = encoder.write_header().unwrap();
-        writer.write_image_data(&self.data).unwrap();
+        writer.write_image_data(&data).unwrap();
     }
 }
 
